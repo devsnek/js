@@ -1,0 +1,19 @@
+{
+  "name": "js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "js.js",
+  "bin": {
+    "js": "js.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devsnek/js.git"
+  },
+  "author": "snek <me@gus.host>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/devsnek/js/issues"
+  },
+  "homepage": "https://github.com/devsnek/js#readme"
+}
