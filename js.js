@@ -31,7 +31,7 @@ function stdout(data) {
   process.stdout.write(typeof data === 'string' ? data :
     process.stdout.isTTY ?
       require('util').inspect(data, { colors: true }) :
-      JSON.stringify(data));
+      String(JSON.stringify(data)));
 }
 
 function run(stdin) { // eslint-disable-line no-unused-vars
