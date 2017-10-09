@@ -1,16 +1,23 @@
 #!/usr/bin/env node
 if (!process.argv[2]) return;
 
+const ttyin = Boolean(process.stdin.isTTY);
+const ttyout = Boolean(process.stdout.isTTY);
+
 let input = '';
 for (const item of process.argv.slice(2)) {
   if (item[0] !== '-' || item[1] !== '-') input += item;
   // its a switch
 }
-
+if (input[0] === '-' && input[1] === 'v' && input.length === 2) {
+  stdout(`${require('./package.json').version}\n`);
+  return;
+}
 if (input[0] === '{') input = `(${input})`;
 
-if (process.stdin.isTTY) {
+if (ttyin) {
   run('');
+  if (ttyout) stdout('\n');
 } else {
   let stdin = '';
   process.stdin.setEncoding('utf8');
@@ -23,13 +30,14 @@ if (process.stdin.isTTY) {
     } catch (err) {
       run(stdin.trimRight());
     }
+    if (ttyout) stdout('\n');
   });
   process.stdin.resume();
 }
 
 function stdout(data) {
   process.stdout.write(typeof data === 'string' ? data :
-    process.stdout.isTTY ?
+    ttyout ?
       require('util').inspect(data, { colors: true }) :
       String(JSON.stringify(data)));
 }
