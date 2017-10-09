@@ -1,4 +1,4 @@
-#js
+# js
 ### The dead simple and extremely fast cli tool for javasript
 
 #### Usage
@@ -8,3 +8,4 @@
 - all the pipes
   - `cat weather.json | js stdin.temperature` ➟ `21c`
   - `curl httpbin.org/get -s | js stdin.origin | toilet -t | lolcat -ti`
+
