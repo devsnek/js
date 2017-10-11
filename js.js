@@ -15,6 +15,29 @@ if (input[0] === '-' && input[1] === 'v' && input.length === 2) {
 }
 if (input[0] === '{') input = `(${input})`;
 
+for (const name of require('repl')._builtinLibs) {
+  const setReal = (val) => {
+    delete global[name];
+    global[name] = val;
+  };
+  Object.defineProperty(global, name, {
+    get: () => {
+      const lib = require(name);
+      delete global[name];
+      Object.defineProperty(global, name, {
+        get: () => lib,
+        set: setReal,
+        configurable: true,
+        enumerable: false,
+      });
+      return lib;
+    },
+    set: setReal,
+    configurable: true,
+    enumerable: false,
+  });
+}
+
 if (ttyin) {
   run('');
   if (ttyout) stdout('\n');
