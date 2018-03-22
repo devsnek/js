@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+
+'use strict';
+
 if (!process.argv[2])
   return;
 
@@ -9,7 +12,6 @@ let input = '';
 for (const item of process.argv.slice(2)) {
   if (item[0] !== '-' || item[1] !== '-')
     input += item;
-  // its a switch
 }
 if (input[0] === '-' && input[1] === 'v' && input.length === 2) {
   stdout(`${require('./package.json').version}\n`);
@@ -71,7 +73,7 @@ function stdout(data) {
 }
 
 function run(stdin) { // eslint-disable-line no-unused-vars
-  const ret = eval(input);
+  const ret = require('vm').runInThisContext(input);
   if (!input.includes('stdout'))
     stdout(ret);
 }

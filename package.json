@@ -4,7 +4,7 @@
   "description": "The dead simple and extremely fast cli tool for javasript",
   "main": "js.js",
   "bin": {
-    "js": "js.js"
+    "js": "./js"
   },
   "repository": {
     "type": "git",
