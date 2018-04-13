@@ -1,6 +1,6 @@
 {
   "name": "@snek/js",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "The dead simple and extremely fast cli tool for javasript",
   "main": "js.js",
   "bin": {
