@@ -2,23 +2,36 @@
 
 'use strict';
 
-if (!process.argv[2])
+if (!process.argv[2]) {
   return;
+}
 
 const ttyin = Boolean(process.stdin.isTTY);
 const ttyout = Boolean(process.stdout.isTTY);
 
+function stdout(data) {
+  if (typeof data === 'string') {
+    process.stdout.write(data);
+  } else if (ttyout) {
+    process.stdout.write(require('util').inspect(data, { colors: true }));
+  } else {
+    process.stdout.write(String(JSON.stringify(data)));
+  }
+}
+
 let input = '';
 for (const item of process.argv.slice(2)) {
-  if (item[0] !== '-' || item[1] !== '-')
+  if (item[0] !== '-' || item[1] !== '-') {
     input += item;
+  }
 }
 if (input[0] === '-' && input[1] === 'v' && input.length === 2) {
   stdout(`${require('./package.json').version}\n`);
   return;
 }
-if (input[0] === '{')
+if (input[0] === '{') {
   input = `(${input})`;
+}
 
 for (const name of require('repl')._builtinLibs) {
   const setReal = (val) => {
@@ -43,10 +56,18 @@ for (const name of require('repl')._builtinLibs) {
   });
 }
 
+function run(stdin) { // eslint-disable-line no-unused-vars
+  const ret = require('vm').runInThisContext(input);
+  if (!input.includes('stdout')) {
+    stdout(ret);
+  }
+}
+
 if (ttyin) {
   run('');
-  if (ttyout)
+  if (ttyout) {
     stdout('\n');
+  }
 } else {
   let stdin = '';
   process.stdin.setEncoding('utf8');
@@ -59,21 +80,9 @@ if (ttyin) {
     } catch (err) {
       run(stdin.trimRight());
     }
-    if (ttyout)
+    if (ttyout) {
       stdout('\n');
+    }
   });
   process.stdin.resume();
-}
-
-function stdout(data) {
-  process.stdout.write(typeof data === 'string' ? data :
-    ttyout ?
-      require('util').inspect(data, { colors: true }) :
-      String(JSON.stringify(data)));
-}
-
-function run(stdin) { // eslint-disable-line no-unused-vars
-  const ret = require('vm').runInThisContext(input);
-  if (!input.includes('stdout'))
-    stdout(ret);
 }
